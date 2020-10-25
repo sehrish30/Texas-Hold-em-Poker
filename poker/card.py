@@ -23,6 +23,7 @@ class Card():
     def __init__(self, rank, suit):
         self.rank = rank
         self.suit = suit
+        self.rank_index = self.RANKS.index(rank)
 
         if rank not in self.RANKS:
             raise ValueError(f"Invalid rank, Rank must be one of the following {self.RANKS}")
@@ -38,7 +39,13 @@ class Card():
 
     # modify the equality of objects so it only refers to arguments
     def __eq__(self, other):
-        return self.rank == other.rank  and self.suit == other.suit   
+        return self.rank == other.rank  and self.suit == other.suit 
+
+    def __lt__(self, other):
+        return self.rank_index < other.rank_index
+        # current_card_rank_index = self.RANKS.index(self.rank)
+        # other_card_rank_index = self.RANKS.index(other.rank)
+        # return current_card_rank_index < other_card_rank_index      
 
           
 
