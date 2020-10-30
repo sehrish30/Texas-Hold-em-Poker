@@ -15,7 +15,7 @@ class PlayerTest(unittest.TestCase):
         mock_hand = MagicMock() # magic method tracks its own calss
         mock_hand.best_rank.return_value= "Straight Flush"
 
-        player = Player(name = "Boris", hand = mock_hand)
+        player = Player(name = "Sehrish", hand = mock_hand)
         
         # check that the mocked return value is getting returned from best_hand
         self.assertEqual(

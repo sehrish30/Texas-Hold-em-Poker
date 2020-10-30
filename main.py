@@ -2,6 +2,7 @@ from poker.card import Card
 from poker.deck import Deck
 from poker.hand import Hand
 from poker.player import Player
+from poker.game_round import GameRound
 
 # once executed in REPL card1 and card2 will be available in namespace
 # no need of these cards we have made 52 cards
@@ -22,3 +23,10 @@ hand1 = Hand(cards = [])
 hand2 = Hand(cards = [])
 player1 = Player(name= "Sehrish", hand = hand1)
 player2 = Player(name= "Bobby", hand = hand2)
+players = [player1, player2]
+
+# in gameround it will ask for deck and players
+# players will compute best_rank locally
+# and the play will find out the winner
+# game_round = GameRound(deck = deck, players=players)
+# game_round.play()
