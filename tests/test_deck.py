@@ -42,6 +42,27 @@ class DeckTest(unittest.TestCase):
         # check it was called exactly once
         # the argument we expect to have been invoked with is cards
         mock_shuffle.assert_called_once_with(cards)
+
+    def test_removes_specified_number_of_cards_from_deck(self):
+        ace   =  Card(rank = "Ace", suit = "Spades")
+        eight =  Card(rank = "8", suit= "Diamonds")
+        cards = [ace, eight]
+        deck = Deck()
+        deck.add_cards(cards)
+        
+        # testing the return value of the method that we call and it mutates object
+        self.assertEqual(
+            deck.remove_cards(1),
+            [ace]
+        )
+
+        # testing the state of the object
+        self.assertEqual(
+            deck.cards,
+            [eight]
+        )
+           
+
         
 
 
