@@ -19,8 +19,8 @@ deck.add_cards(cards)
 
 # test it like card1.rank, str(card1), card2
 
-hand1 = Hand(cards = [])
-hand2 = Hand(cards = [])
+hand1 = Hand()
+hand2 = Hand()
 player1 = Player(name= "Sehrish", hand = hand1)
 player2 = Player(name= "Bobby", hand = hand2)
 players = [player1, player2]

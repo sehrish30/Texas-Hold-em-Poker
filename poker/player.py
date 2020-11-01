@@ -5,3 +5,7 @@ class Player():
 
     def best_hand(self):
         return self.hand.best_rank()
+
+    # game round add cards -> player add cards -> to hand
+    def add_cards(self, cards):
+        self.hand.add_cards(cards)

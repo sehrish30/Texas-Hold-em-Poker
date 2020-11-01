@@ -1,10 +1,14 @@
 class Hand():
-    def __init__(self, cards):
+    def __init__(self):
+        self.cards = []
+
+    def add_cards(self, cards):
         # sorting the cards to figure out straight
         # cards.sort() should not be used be it will mutate the cards so anything referncing to cards can cause bugs because they will refer to same object in computers memory
-        copy = cards[:]
+        copy = self.cards[:]
+        copy.extend(cards)
         copy.sort()
-        self.cards = copy
+        self.cards =  copy   
 
     @property
     def _rank_validation_from_best_to_worst(self):
