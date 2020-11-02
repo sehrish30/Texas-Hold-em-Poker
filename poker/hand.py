@@ -2,6 +2,11 @@ class Hand():
     def __init__(self):
         self.cards = []
 
+    def __repr__(self):
+        # since card has magic method __str__ we can represent it like this
+        cards_as_strings= [str(card) for card in self.cards]
+        return ", ".join(cards_as_strings)     
+
     def add_cards(self, cards):
         # sorting the cards to figure out straight
         # cards.sort() should not be used be it will mutate the cards so anything referncing to cards can cause bugs because they will refer to same object in computers memory

@@ -7,6 +7,19 @@ class HandTest(unittest.TestCase):
         hand = Hand()
         self.assertEqual(hand.cards, [])
 
+    def test_shows_all_its_cards_with_technical_representation(self) :
+        cards = [
+            Card(rank = "Ace", suit = "Diamonds"),
+            Card(rank = "7", suit = "Clubs")
+        ]   
+        hand = Hand()
+        hand.add_cards(cards) 
+
+        self.assertEqual(
+            repr(hand),
+            "7 of Clubs, Ace of Diamonds"
+        )
+
     def test_recieves_and_stores_cards(self):
         # this is checking for the sorting in __init__
         ace_of_spades = Card(rank = "Ace", suit = "Spades")

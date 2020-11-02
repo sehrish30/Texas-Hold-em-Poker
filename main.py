@@ -14,7 +14,7 @@ cards = Card.create_standard_52_cards()
 deck.add_cards(cards)
 
 # from main import card1, card2
-# from main import deck, cards, hand1, hand2, player1, player2
+# from main import deck, cards, game_round, hand1, hand2, player1, player2
 # python -m unittest discover tests
 
 # test it like card1.rank, str(card1), card2
@@ -22,11 +22,11 @@ deck.add_cards(cards)
 hand1 = Hand()
 hand2 = Hand()
 player1 = Player(name= "Sehrish", hand = hand1)
-player2 = Player(name= "Bobby", hand = hand2)
+player2 = Player(name= "Ali", hand = hand2)
 players = [player1, player2]
 
 # in gameround it will ask for deck and players
 # players will compute best_rank locally
 # and the play will find out the winner
-# game_round = GameRound(deck = deck, players=players)
-# game_round.play()
+game_round = GameRound(deck = deck, players=players)
+game_round.play()
