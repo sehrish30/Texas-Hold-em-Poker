@@ -5,6 +5,22 @@ from poker.game_round import GameRound
 from poker.card import Card
 
 class GameRoundTest(unittest.TestCase):
+    # setup runs before every test variables arenot available they should be assigned to attributes
+    def setUp(self):
+        self.first_two_cards= [
+            Card(rank = "2", suit = "Hearts"),
+            Card(rank = "6", suit = "Clubs")
+        ]
+        self.next_two_cards = [
+            Card(rank = "9", suit = "Diamonds"),
+            Card(rank = "4", suit = "Spades")
+        ]
+        self.community_cards = [
+                Card(rank = "2", suit = "Diamonds"),
+                Card(rank = "4", suit = "Hearts"),
+                Card(rank = "10", suit = "Spades")
+            ]
+
     def test_stores_deck_and_players(self):
       # the purpose of this test is only to check correct assignment
        deck = MagicMock()
@@ -47,23 +63,18 @@ class GameRoundTest(unittest.TestCase):
         mock_deck.shuffle.assert_called_once()
 
     def test_deals_two_initial_cards_from_deck_to_each_player(self):
-        first_two_cards= [
-            Card(rank = "2", suit = "Hearts"),
-            Card(rank = "6", suit = "Clubs")
-        ]
-        next_two_cards = [
-            Card(rank = "9", suit = "Diamonds"),
-            Card(rank = "4", suit = "Spades")
-        ]
-        
+           
         mock_deck = MagicMock()
         # side effect will ensure all elements of array are values returned like first value
         # on first call then second attribute on second call
         # alternative to side effect is return value
-        mock_deck.remove_cards.side_effect = [first_two_cards, next_two_cards]
+        mock_deck.remove_cards.side_effect = [
+            self.first_two_cards, # returned value for first player
+            self.next_two_cards,  # returned value for second player second call
+            self.community_cards  # returned value for third call community cards
+        ]
 
         # since its side_effect I am also testing the data that is fundamentally coming from remove cards method
-
         mock_player1 =  MagicMock()
         mock_player2 =  MagicMock()
 
@@ -83,8 +94,12 @@ class GameRoundTest(unittest.TestCase):
         ])
         
         # didnot use assert_called_once_with for flexibility if we want to add 2 3 times
-        mock_player1.add_cards.assert_called_with(first_two_cards)
-        mock_player2.add_cards.assert_called_with(next_two_cards)
+        mock_player1.add_cards.assert_has_calls([
+            call(self.first_two_cards)
+        ])
+        mock_player2.add_cards.assert_has_calls([
+        call(self.next_two_cards)
+        ])
 
     def test_removes_player_if_not_willing_to_make_bet(self):    
         deck = MagicMock()
@@ -92,7 +107,7 @@ class GameRoundTest(unittest.TestCase):
         player2 = MagicMock()
 
         player1.wants_to_fold.return_value = True
-        player1.wants_to_fold.return_value = False
+        player2.wants_to_fold.return_value = False
 
         players = [player1, player2]
 
@@ -103,6 +118,36 @@ class GameRoundTest(unittest.TestCase):
             game_round.players,
             [player2]
         )
+
+    def test_deals_same_three_community_cards_to_all_players_in_flop(self):
+            mock_player1 = MagicMock()
+            mock_player1.wants_to_fold.return_value = False # since magic mock is truthy value it will evaluate to true and remove all players in _make_bets
+            mock_player2 = MagicMock()
+            mock_player2.wants_to_fold.return_value = False
+            players = [mock_player1, mock_player2]         
+
+            mock_deck = MagicMock()
+            mock_deck.remove_cards.side_effect = [
+                self.first_two_cards,
+                self.next_two_cards,
+                self.community_cards # these are flop
+            ]
+            game_round = GameRound(deck = mock_deck, players = players)
+            game_round.play()
+
+            # first check I have made a call to deck with remove_card method argument 3
+            # assert called with only checks for last call
+            mock_deck.remove_cards.assert_has_calls([call(3)])
+
+            # second check if both player get community_cards or flop
+            mock_player1.add_cards.assert_called_with(self.community_cards)
+            mock_player2.add_cards.assert_called_with(self.community_cards)
+           
+
+
+
+
+
 
 
 
