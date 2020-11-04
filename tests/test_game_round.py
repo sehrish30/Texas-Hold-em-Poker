@@ -15,11 +15,14 @@ class GameRoundTest(unittest.TestCase):
             Card(rank = "9", suit = "Diamonds"),
             Card(rank = "4", suit = "Spades")
         ]
-        self.community_cards = [
+        self.flop_cards = [
                 Card(rank = "2", suit = "Diamonds"),
                 Card(rank = "4", suit = "Hearts"),
                 Card(rank = "10", suit = "Spades")
             ]
+        self.turn_card = [Card(rank = "9", suit = "Hearts")]
+        self.river_card = [Card(rank = "Queen", suit = "Clubs")]
+
 
     def test_stores_deck_and_players(self):
       # the purpose of this test is only to check correct assignment
@@ -71,7 +74,9 @@ class GameRoundTest(unittest.TestCase):
         mock_deck.remove_cards.side_effect = [
             self.first_two_cards, # returned value for first player
             self.next_two_cards,  # returned value for second player second call
-            self.community_cards  # returned value for third call community cards
+            self.flop_cards,  # returned value for third call community cards
+            self.turn_card,
+            self.river_card
         ]
 
         # since its side_effect I am also testing the data that is fundamentally coming from remove cards method
@@ -119,7 +124,7 @@ class GameRoundTest(unittest.TestCase):
             [player2]
         )
 
-    def test_deals_same_three_community_cards_to_all_players_in_flop(self):
+    def test_deals_each_player_3_flop_1_turn_and_1_river_cards(self):
             mock_player1 = MagicMock()
             mock_player1.wants_to_fold.return_value = False # since magic mock is truthy value it will evaluate to true and remove all players in _make_bets
             mock_player2 = MagicMock()
@@ -130,18 +135,31 @@ class GameRoundTest(unittest.TestCase):
             mock_deck.remove_cards.side_effect = [
                 self.first_two_cards,
                 self.next_two_cards,
-                self.community_cards # these are flop
+                self.flop_cards,
+                self.turn_card,
+                self.river_card
             ]
             game_round = GameRound(deck = mock_deck, players = players)
             game_round.play()
 
-            # first check I have made a call to deck with remove_card method argument 3
-            # assert called with only checks for last call
-            mock_deck.remove_cards.assert_has_calls([call(3)])
+            # first check if deck removes cards with these calls
+            mock_deck.remove_cards.assert_has_calls([
+                call(3),
+                call(1),
+                call(1)
+            ])
 
-            # second check if both player get community_cards or flop
-            mock_player1.add_cards.assert_called_with(self.community_cards)
-            mock_player2.add_cards.assert_called_with(self.community_cards)
+            calls = [
+                call(self.flop_cards),
+                call(self.turn_card),
+                call(self.river_card)
+            ]
+            # second check if both players get community_cards
+            for player in players:
+                player.add_cards.assert_has_calls(calls)
+
+            
+            
            
 
 
