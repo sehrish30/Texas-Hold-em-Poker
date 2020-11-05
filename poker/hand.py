@@ -1,4 +1,8 @@
-from poker.validators import HighCardValidator
+from poker.validators import (
+    PairValidator,
+    HighCardValidator,
+    NoCardsValidator
+    )
 
 class Hand():
     def __init__(self):
@@ -9,6 +13,7 @@ class Hand():
         cards_as_strings= [str(card) for card in self.cards]
         return ", ".join(cards_as_strings)     
 
+   # Cards will be sorted when they go to validators classes
     def add_cards(self, cards):
         # sorting the cards to figure out straight
         # cards.sort() should not be used be it will mutate the cards so anything referncing to cards can cause bugs because they will refer to same object in computers memory
@@ -28,9 +33,9 @@ class Hand():
             ("Straight", self._straight),
             ("Three of a Kind", self._three_of_a_kind),
             ("Two Pair", self._two_pair),
-            ("Pair", self._pair),
+            ("Pair", PairValidator(cards = self.cards).is_valid),
             ("High Card", HighCardValidator(cards = self.cards).is_valid),
-            ("No Cards", self._no_cards)
+            ("No Cards", NoCardsValidator(cards = self.cards).is_valid)
         )    
 
     # build the best hand for poker
@@ -59,7 +64,7 @@ class Hand():
         return len(rank_with_four_of_a_kind) == 1                    
 
     def _full_house(self):
-        return self._three_of_a_kind() and self._pair()        
+        return self._three_of_a_kind() and PairValidator(cards = self.cards).is_valid()        
 
     def _flush(self):
         suits_that_occur_5_or_more_times = {
@@ -92,13 +97,6 @@ class Hand():
     def _two_pair(self):
         ranks_with_pairs = self._ranks_with_count(2)
         return len(ranks_with_pairs) == 2
-
-    def _pair(self):
-        ranks_with_pairs = self._ranks_with_count(2)
-        return len(ranks_with_pairs) == 1
-
-    def _no_cards(self):
-        return len(self.cards) == 0    
 
 
     def _ranks_with_count(self, count):
