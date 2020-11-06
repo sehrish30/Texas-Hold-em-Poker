@@ -1,4 +1,5 @@
 from poker.validators import (
+    TwoPairValidator,
     PairValidator,
     HighCardValidator,
     NoCardsValidator
@@ -32,7 +33,7 @@ class Hand():
             ("Flush", self._flush),
             ("Straight", self._straight),
             ("Three of a Kind", self._three_of_a_kind),
-            ("Two Pair", self._two_pair),
+            ("Two Pair", TwoPairValidator(cards = self.cards).is_valid),
             ("Pair", PairValidator(cards = self.cards).is_valid),
             ("High Card", HighCardValidator(cards = self.cards).is_valid),
             ("No Cards", NoCardsValidator(cards = self.cards).is_valid)
@@ -93,10 +94,6 @@ class Hand():
     def _three_of_a_kind(self): 
         ranks_with_three_of_a_kind = self._ranks_with_count(3)
         return len(ranks_with_three_of_a_kind) == 1
-
-    def _two_pair(self):
-        ranks_with_pairs = self._ranks_with_count(2)
-        return len(ranks_with_pairs) == 2
 
 
     def _ranks_with_count(self, count):
