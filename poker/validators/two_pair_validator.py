@@ -3,7 +3,7 @@ from poker.validators import RankValidator
 # to make pair validator inherit from Rank validator put it in parenthesis
 class TwoPairValidator(RankValidator):
     def __init__(self, cards):
-        self.cards = cards;
+        self.cards = cards
         self.name = "Two Pair"
 
     def is_valid(self):
