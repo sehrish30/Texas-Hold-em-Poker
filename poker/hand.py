@@ -1,4 +1,5 @@
 from poker.validators import (
+    FlushValidator,
     StraightValidator,
     ThreeOfAKindValidator,
     TwoPairValidator,
@@ -32,7 +33,7 @@ class Hand():
             ("Straight Flush", self._straight_flush),
             ("Four of a Kind", self._four_of_a_kind),
             ("Full House", self._full_house),
-            ("Flush", self._flush),
+            ("Flush", FlushValidator(cards = self.cards).is_valid),
             ("Straight", StraightValidator(cards = self.cards).is_valid),
             ("Three of a Kind", ThreeOfAKindValidator(cards = self.cards).is_valid),
             ("Two Pair", TwoPairValidator(cards = self.cards).is_valid),
@@ -58,7 +59,7 @@ class Hand():
         return is_straight_flush and is_royal           
 
     def _straight_flush(self):
-        return StraightValidator(cards = self.cards).is_valid() and self._flush()
+        return StraightValidator(cards = self.cards).is_valid() and FlushValidator(cards = self.cards).is_valid()
 
 
     def _four_of_a_kind(self):
@@ -69,17 +70,6 @@ class Hand():
     def _full_house(self):
         return ThreeOfAKindValidator(cards = self.cards).is_valid() and PairValidator(cards = self.cards).is_valid()        
 
-    def _flush(self):
-        suits_that_occur_5_or_more_times = {
-            suit: suit_count
-            for suit, suit_count in self._card_suit_counts.items()
-            if suit_count >= 5
-        }
-        return len(suits_that_occur_5_or_more_times) == 1
-
-        #{
-        # "Hearts": 5
-        # }
 
     def _ranks_with_count(self, count):
         return {
@@ -88,16 +78,6 @@ class Hand():
             for rank,rank_count in self._card_rank_counts.items() # items iterate over whole dict rather than likes .keys or .values
             if rank_count == count
         } 
-
-    @property
-    def _card_suit_counts(self):
-        card_suit_counts = {} 
-        for card in self.cards:
-            # first iterates over loop puts value in dict
-            # { "Ace": 0 } then iterates it twice makes it { "Ace": 2 }
-            card_suit_counts.setdefault(card.suit, 0)
-            card_suit_counts[card.suit] += 1
-        return card_suit_counts           
 
     @property
     def _card_rank_counts(self):
