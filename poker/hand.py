@@ -1,4 +1,6 @@
 from poker.validators import (
+    FourOfAKindValidator,
+    FullHouseValidator,
     FlushValidator,
     StraightValidator,
     ThreeOfAKindValidator,
@@ -31,8 +33,8 @@ class Hand():
         return (
             ("Royal Flush", self._royal_flush),
             ("Straight Flush", self._straight_flush),
-            ("Four of a Kind", self._four_of_a_kind),
-            ("Full House", self._full_house),
+            ("Four of a Kind",FourOfAKindValidator(cards = self.cards).is_valid),
+            ("Full House", FullHouseValidator(cards = self.cards).is_valid),
             ("Flush", FlushValidator(cards = self.cards).is_valid),
             ("Straight", StraightValidator(cards = self.cards).is_valid),
             ("Three of a Kind", ThreeOfAKindValidator(cards = self.cards).is_valid),
@@ -59,35 +61,7 @@ class Hand():
         return is_straight_flush and is_royal           
 
     def _straight_flush(self):
-        return StraightValidator(cards = self.cards).is_valid() and FlushValidator(cards = self.cards).is_valid()
-
-
-    def _four_of_a_kind(self):
-        # in texas hold em poker we only have 7 cards two for us and seven for community
-        rank_with_four_of_a_kind = self._ranks_with_count(4)
-        return len(rank_with_four_of_a_kind) == 1                    
-
-    def _full_house(self):
-        return ThreeOfAKindValidator(cards = self.cards).is_valid() and PairValidator(cards = self.cards).is_valid()        
-
-
-    def _ranks_with_count(self, count):
-        return {
-            # filter the ones with the count sent
-            rank : rank_count
-            for rank,rank_count in self._card_rank_counts.items() # items iterate over whole dict rather than likes .keys or .values
-            if rank_count == count
-        } 
-
-    @property
-    def _card_rank_counts(self):
-        card_rank_counts = {} 
-        for card in self.cards:
-            # first iterates over loop puts value in dict
-            # { "Ace": 0 } then iterates it twice makes it { "Ace": 2 }
-            card_rank_counts.setdefault(card.rank, 0)
-            card_rank_counts[card.rank] += 1
-        return card_rank_counts
+        return StraightValidator(cards = self.cards).is_valid() and FlushValidator(cards = self.cards).is_valid()                  
 
 # card_rank_counts = {
 # "Ace": 1,

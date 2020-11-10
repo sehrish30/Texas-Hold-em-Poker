@@ -40,37 +40,6 @@ class HandTest(unittest.TestCase):
             ]
         )
 
-    def test_figures_out_full_house_is_best_rank(self):
-        cards = [
-            Card(rank = "3", suit = "Clubs"),
-            Card(rank = "3", suit = "Hearts"),
-            Card(rank = "3", suit = "Spades"),
-            Card(rank = "9", suit = "Diamonds"),
-            Card(rank = "9", suit = "Spades")
-        ]
-        hand = Hand()
-        hand.add_cards(cards)
-
-        self.assertEqual(
-            hand.best_rank(),
-            "Full House"
-        )
-    def test_figures_out_four_of_a_kind_is_a_best_rank(self):
-        cards = [
-            Card(rank = "3", suit = "Clubs"),
-            Card(rank = "3", suit = "Hearts"),
-            Card(rank = "3", suit = "Spades"),
-            Card(rank = "3", suit = "Diamonds"),
-            Card(rank = "9", suit = "Spades")
-        ]
-        hand = Hand()
-        hand.add_cards(cards)
-
-        self.assertEqual(
-            hand.best_rank(),
-            "Four of a Kind"
-        )
-
     def test_figures_out_straight_flush_is_best_rank(self):
         cards = [
             Card(rank = "3", suit = "Clubs"),
