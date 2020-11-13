@@ -1,6 +1,7 @@
 import unittest
 from poker.hand import Hand
 from poker.card import Card
+from poker.validators import PairValidator
 
 class HandTest(unittest.TestCase):
     def test_starts_with_no_card(self):
@@ -39,6 +40,26 @@ class HandTest(unittest.TestCase):
                 ace_of_spades
             ]
         )
+
+    def test_interacts_with_validator_to_get_winning_hand(self):
+        # create a new class than keep Hand as parent class to reduce complexity of 11 validators by overirding one attribute
+        class HandWithOneValidator(Hand):
+            VALIDATORS = (PairValidator,)
+
+        ace_of_hearts = Card(rank = "Ace", suit = "Hearts")
+        ace_of_spades = Card(rank = "Ace", suit = "Spades")
+        cards = [ace_of_hearts, ace_of_spades]
+
+        # since this class has parent class Hand it has all attributes and methods of it
+        hand = HandWithOneValidator()
+        hand.add_cards(cards = cards)
+        
+        self.assertEqual(         
+            hand.best_rank(),
+            "Pair"
+        )
+
+
 
    
 
