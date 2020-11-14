@@ -4,20 +4,13 @@ from poker.hand import Hand
 from poker.player import Player
 from poker.game_round import GameRound
 
-# once executed in REPL card1 and card2 will be available in namespace
-# no need of these cards we have made 52 cards
-# card1 = Card(rank = "2", suit = "Spades")
-# card2 = Card(rank = "Ace", suit = "Hearts")
-
 deck = Deck()
 cards = Card.create_standard_52_cards()
 deck.add_cards(cards)
 
-# from main import card1, card2
 # from main import deck, cards, game_round, hand1, hand2, player1, player2
 # python -m unittest discover tests
 
-# test it like card1.rank, str(card1), card2
 
 hand1 = Hand()
 hand2 = Hand()
@@ -30,3 +23,21 @@ players = [player1, player2]
 # and the play will find out the winner
 game_round = GameRound(deck = deck, players=players)
 game_round.play()
+
+for player in players:
+    print(f"{player.name} receives a {player.hand}.")
+    index, hand_name, hand_cards = player.best_hand()
+    hand_cards_strings = [str(card) for card in hand_cards]
+    hand_cards_string = " and ".join(hand_cards_strings)
+    print(f"{player.name} has a {hand_name} with a {hand_cards_string}.")
+
+# max will extract one object from players
+winning_player = max(players)
+print(f"The winner is {winning_player.name}")
+
+# run it python main.py
+
+
+
+
+
